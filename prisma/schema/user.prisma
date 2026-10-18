@@ -1,0 +1,28 @@
+model User {
+    id           String   @id @default(cuid())
+    name         String
+    email        String   @unique
+    passwordHash String
+    role         Role     @default(EMPLOYEE)
+    isActive     Boolean  @default(true)
+    departmentId String
+    managerId    String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    department Department  @relation("DepartmentMembers", fields: [departmentId], references: [id], onDelete: Restrict)
+    headOf     Department? @relation("DepartmentHead")
+
+    // self-relation: a manager has many direct reports
+    manager User?  @relation("ManagerReports", fields: [managerId], references: [id], onDelete: SetNull)
+    reports User[] @relation("ManagerReports")
+
+    expenses          Expense[]          @relation("ExpenseEmployee")
+    reimbursed        Expense[]          @relation("ExpenseReimbursedBy")
+    approvals         Approval[]
+    notifications     Notification[]
+    pushSubscriptions PushSubscription[]
+
+    @@index([departmentId])
+    @@index([managerId])
+}
