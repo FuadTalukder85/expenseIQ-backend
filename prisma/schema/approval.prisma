@@ -1,0 +1,15 @@
+model Approval {
+    id         String           @id @default(cuid())
+    expenseId  String
+    approverId String
+    level      Int
+    decision   ApprovalDecision
+    comment    String?
+    decidedAt  DateTime         @default(now())
+
+    expense  Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+    approver User    @relation(fields: [approverId], references: [id], onDelete: Restrict)
+
+    @@index([expenseId])
+    @@index([approverId, decidedAt])
+}

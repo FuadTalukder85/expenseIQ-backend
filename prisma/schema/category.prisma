@@ -1,0 +1,17 @@
+model Category {
+    id       String  @id @default(cuid())
+    name     String  @unique
+    taxRate  Decimal @default(0) @db.Decimal(5, 2) // percent, e.g. 15.00
+    isActive Boolean @default(true)
+
+    expenses Expense[]
+}
+
+model ApprovalPolicy {
+    id              String   @id @default(cuid())
+    departmentId    String?  @unique
+    thresholdAmount Decimal  @default(500) @db.Decimal(14, 2)
+    updatedAt       DateTime @updatedAt
+
+    department Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+}

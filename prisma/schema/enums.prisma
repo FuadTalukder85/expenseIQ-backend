@@ -1,0 +1,29 @@
+enum Role {
+    EMPLOYEE
+    MANAGER
+    DEPT_HEAD
+    FINANCE
+    ADMIN
+}
+
+enum ExpenseStatus {
+    DRAFT
+    PENDING_MANAGER
+    PENDING_HEAD
+    APPROVED
+    REJECTED
+    REIMBURSED
+}
+
+enum ApprovalDecision {
+    APPROVED
+    REJECTED
+}
+
+enum NotificationType {
+    EXPENSE_SUBMITTED
+    EXPENSE_FORWARDED
+    EXPENSE_APPROVED
+    EXPENSE_REJECTED
+    EXPENSE_REIMBURSED
+}

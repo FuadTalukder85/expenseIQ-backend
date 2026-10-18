@@ -1,0 +1,41 @@
+model Expense {
+    id           String   @id @default(cuid())
+    employeeId   String
+    departmentId String
+    categoryId   String
+    vendor       String
+    expenseDate  DateTime
+    description  String?
+
+    amount    Decimal @db.Decimal(14, 2)
+    discount  Decimal @default(0) @db.Decimal(14, 2)
+    taxRate   Decimal @default(0) @db.Decimal(5, 2)
+    taxAmount Decimal @default(0) @db.Decimal(14, 2)
+    netAmount Decimal @db.Decimal(14, 2)
+
+    status         ExpenseStatus @default(DRAFT)
+    receiptText    String?
+    receiptHash    String?
+    aiFlags        Json?
+    budgetExceeded Boolean       @default(false)
+
+    submittedAt    DateTime?
+    approvedAt     DateTime?
+    reimbursedAt   DateTime?
+    reimbursedById String?
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
+
+    employee     User       @relation("ExpenseEmployee", fields: [employeeId], references: [id], onDelete: Restrict)
+    reimbursedBy User?      @relation("ExpenseReimbursedBy", fields: [reimbursedById], references: [id], onDelete: SetNull)
+    department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+    category     Category   @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+    approvals     Approval[]
+    notifications Notification[]
+
+    @@index([employeeId, status])
+    @@index([departmentId, status, expenseDate])
+    @@index([receiptHash])
+    @@index([status])
+}
