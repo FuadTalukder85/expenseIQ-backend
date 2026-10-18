@@ -76,6 +76,7 @@ app.get("/health", async (_req: Request, res: Response) => {
 
 // API Routes
 app.use("/api/v1", IndexRoutes);
+app.use(IndexRoutes);
 
 // Error Handlers
 app.use(globalErrorHandler);
